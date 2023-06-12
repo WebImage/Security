@@ -2,9 +2,9 @@
 
 namespace WebImage\Security;
 
-interface SecurityEntityInterface extends NameableIdentityInterface
+interface SecurityEntityInterface
 {
-    public function getSecurityManager(): SecurityManager;
+    public function getQId(): QId;
 
     public function addRole(string $role): void;
 
@@ -18,8 +18,8 @@ interface SecurityEntityInterface extends NameableIdentityInterface
     public function getRoles(): array;
 
     public function canDo(string $permission): bool;
-    public function canDoAll(array $permissions): bool;
-    public function canDoAny(array $permissions): bool;
 
-//    public function getNamespace(): string;
+    public function canDoAll(array $permissions): bool;
+
+    public function canDoAny(array $permissions): bool;
 }

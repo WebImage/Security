@@ -6,6 +6,10 @@ use WebImage\Core\Dictionary;
 
 interface RolePermissionProviderInterface
 {
+    /**
+     * @param string[] $role_ids
+     * @return Dictionary
+     */
     public function forRoles(array $role_ids): Dictionary;
 
     public function roleHasPermission(string $role, string $permission): bool;

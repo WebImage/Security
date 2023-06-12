@@ -2,25 +2,28 @@
 
 namespace WebImage\Security;
 
-abstract class AbstractSecurityEntity implements SecurityEntityInterface
+abstract class AbstractSecurityEntity implements SecurityEntityInterface, SecurityManagerAwareInterface
 {
-    private SecurityManager $securityManager;
+    use SecurityManagerAwareTrait;
+
+    private Qid $qid;
+    /** @var Role[] */
+    private array $roles = [];
 
     /**
-     * @param SecurityManager $security
+     * @param SecurityManager $securityManager
+     * @param QId $qid
      */
-    public function __construct(SecurityManager $security)
+//    public function __construct(SecurityManager $securityManager, QId $qid)
+    public function __construct(SecurityManager $securityManager, QId $qid)
     {
-        $this->securityManager = $security;
+        $this->setSecurityManager($securityManager);
+        $this->qid = $qid;
     }
 
-    abstract public function getId(): string;
-    abstract public function getName(): string;
-//    abstract public function getNamespace(): string;
-
-    public function getSecurityManager(): SecurityManager
+    public function getQId(): QId
     {
-        return $this->securityManager;
+        return $this->qid;
     }
 
     public function addRole(string $role): void
@@ -43,22 +46,35 @@ abstract class AbstractSecurityEntity implements SecurityEntityInterface
      */
     public function getRoles(): array
     {
-        return $this->getSecurityManager()->entityRoles()->getRolesForEntity($this);
+        return $this->getSecurityManager()->roles()->getAll(
+            $this->getSecurityManager()->entityRoles()->getRolesForEntity($this)
+        );
     }
 
     public function canDo(string $permission): bool
     {
-//        $permissions = $this->getRoleManager()->ca
+        foreach ($this->getRoles() as $role) {
+            if ($role->canDo($permission)) return true;
+        }
+
         return false;
     }
 
     public function canDoAll(array $permissions): bool
     {
-        return false;
+        foreach ($permissions as $permission) {
+            if (!$this->canDo($permission)) return false;
+        }
+
+        return true;
     }
 
     public function canDoAny(array $permissions): bool
     {
+        foreach ($permissions as $permission) {
+            if ($this->canDo($permission)) return true;
+        }
+
         return false;
     }
 }

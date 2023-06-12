@@ -2,33 +2,62 @@
 
 namespace WebImage\Security;
 
+use Exception;
+
 class SecurityManager
 {
-    private RoleProviderInterface           $roleProvider;
-    private PermissionProviderInterface     $permissionProvider;
+    private RoleProviderInterface       $roleProvider;
+    private PermissionProviderInterface $permissionProvider;
     private RolePermissionProviderInterface $rolePermissionProvider;
-    private EntityRoleProviderInterface     $entityRolesProvider;
-    private EntityServiceInterface          $entityService;
+    private EntityRoleProviderInterface $entityRolesProvider;
+    private EntityServiceInterface      $entityService;
+    private EntityFactoryResolver       $entityFactoryNamespaceResolver;
 
     /**
      * @param RoleProviderInterface $roleProvider
      * @param PermissionProviderInterface $permissionProvider
-     * @param RolePermissionProviderInterface $rolePermissionProvider
+     *      * @param RolePermissionProviderInterface $rolePermissionProvider
      * @param EntityRoleProviderInterface $entityRolesProvider
+     * @param EntityFactoryResolver $entityResolver
      */
     public function __construct(
-        RoleProviderInterface           $roleProvider,
-        PermissionProviderInterface     $permissionProvider,
+        RoleProviderInterface       $roleProvider,
+        PermissionProviderInterface $permissionProvider,
         RolePermissionProviderInterface $rolePermissionProvider,
-        EntityRoleProviderInterface     $entityRolesProvider,
-        EntityService                   $entityService
+        EntityRoleProviderInterface $entityRolesProvider,
+//        EntityService                   $entityService
+        EntityFactoryResolver       $entityResolver
     )
     {
-        $this->roleProvider           = $roleProvider;
-        $this->permissionProvider     = $permissionProvider;
+        $this->setRoleProvider($roleProvider);
+        $this->setPermissionProvider($permissionProvider);
+        $this->setRolePermissionProvider($rolePermissionProvider);
+        $this->setEntityRolesProvider($entityRolesProvider);
+        $this->entityFactoryNamespaceResolver = $entityResolver;
+    }
+
+    private function setRoleProvider(RoleProviderInterface $roleProvider): void
+    {
+        $this->roleProvider = $roleProvider;
+        if ($roleProvider instanceof SecurityManagerAwareInterface) $roleProvider->setSecurityManager($this);
+    }
+
+    private function setPermissionProvider(PermissionProviderInterface $permissionProvider): void
+    {
+        $this->permissionProvider = $permissionProvider;
+        if ($permissionProvider instanceof SecurityManagerAwareInterface) $permissionProvider->setSecurityManager($this);
+    }
+
+    private function setRolePermissionProvider(RolePermissionProviderInterface $rolePermissionProvider): void
+    {
         $this->rolePermissionProvider = $rolePermissionProvider;
-        $this->entityRolesProvider    = $entityRolesProvider;
-        $this->entityService          = $entityService;
+        if ($rolePermissionProvider instanceof SecurityManagerAwareInterface) $rolePermissionProvider->setSecurityManager($this);
+    }
+
+    private function setEntityRolesProvider(EntityRoleProviderInterface $entityRoleProvider): void
+    {
+        $this->entityRolesProvider = $entityRoleProvider;
+        if ($entityRoleProvider instanceof SecurityManagerAwareInterface) $entityRoleProvider->setSecurityManager($this);
     }
 
     /**
@@ -48,7 +77,7 @@ class SecurityManager
     }
 
     /**
-     * @return RolePermissionProviderInterface
+     * //     * @return RolePermissionProviderInterface
      */
     public function rolePermissions(): RolePermissionProviderInterface
     {
@@ -63,8 +92,32 @@ class SecurityManager
         return $this->entityRolesProvider;
     }
 
-    public function entities(): EntityServiceInterface
+    /**
+     * @throws Exception
+     */
+    public function entity($object): ?SecurityEntityInterface
     {
-        return $this->entityService;
+        if (is_string($object)) return $this->entityFromString($object);
+        else if (is_object($object)) return $this->entityFromObject($object);
+
+        throw new Exception(__METHOD__ . ' must be called with object or string');
+    }
+
+    private function entityFromString(string $entity_id)
+    {
+        $qid     = Qid::fromString($entity_id);
+        $factory = $this->entityFactoryNamespaceResolver->resolve($qid->getNamespace());
+
+        return $factory->get($this, $qid);
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function entityFromObject($object): ?SecurityEntityInterface
+    {
+        $factory = $this->entityFactoryNamespaceResolver->resolveFromObject($object);
+
+        return $factory->entity($this, $object);
     }
 }
