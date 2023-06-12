@@ -9,30 +9,23 @@ class SecurityManager
     private RoleProviderInterface       $roleProvider;
     private PermissionProviderInterface $permissionProvider;
     private RolePermissionProviderInterface $rolePermissionProvider;
-    private EntityRoleProviderInterface $entityRolesProvider;
     private EntityServiceInterface      $entityService;
     private EntityFactoryResolver       $entityFactoryNamespaceResolver;
 
     /**
      * @param RoleProviderInterface $roleProvider
      * @param PermissionProviderInterface $permissionProvider
-     *      * @param RolePermissionProviderInterface $rolePermissionProvider
-     * @param EntityRoleProviderInterface $entityRolesProvider
      * @param EntityFactoryResolver $entityResolver
      */
     public function __construct(
         RoleProviderInterface       $roleProvider,
         PermissionProviderInterface $permissionProvider,
-        RolePermissionProviderInterface $rolePermissionProvider,
-        EntityRoleProviderInterface $entityRolesProvider,
 //        EntityService                   $entityService
         EntityFactoryResolver       $entityResolver
     )
     {
         $this->setRoleProvider($roleProvider);
         $this->setPermissionProvider($permissionProvider);
-        $this->setRolePermissionProvider($rolePermissionProvider);
-        $this->setEntityRolesProvider($entityRolesProvider);
         $this->entityFactoryNamespaceResolver = $entityResolver;
     }
 
@@ -54,12 +47,6 @@ class SecurityManager
         if ($rolePermissionProvider instanceof SecurityManagerAwareInterface) $rolePermissionProvider->setSecurityManager($this);
     }
 
-    private function setEntityRolesProvider(EntityRoleProviderInterface $entityRoleProvider): void
-    {
-        $this->entityRolesProvider = $entityRoleProvider;
-        if ($entityRoleProvider instanceof SecurityManagerAwareInterface) $entityRoleProvider->setSecurityManager($this);
-    }
-
     /**
      * @return RoleProviderInterface
      */
@@ -77,22 +64,6 @@ class SecurityManager
     }
 
     /**
-     * //     * @return RolePermissionProviderInterface
-     */
-    public function rolePermissions(): RolePermissionProviderInterface
-    {
-        return $this->rolePermissionProvider;
-    }
-
-    /**
-     * @return EntityRoleProviderInterface
-     */
-    public function entityRoles(): EntityRoleProviderInterface
-    {
-        return $this->entityRolesProvider;
-    }
-
-    /**
      * @throws Exception
      */
     public function entity($object): ?SecurityEntityInterface
@@ -103,7 +74,7 @@ class SecurityManager
         throw new Exception(__METHOD__ . ' must be called with object or string');
     }
 
-    private function entityFromString(string $entity_id)
+    private function entityFromString(string $entity_id): ?SecurityEntityInterface
     {
         $qid     = Qid::fromString($entity_id);
         $factory = $this->entityFactoryNamespaceResolver->resolve($qid->getNamespace());

@@ -28,17 +28,17 @@ abstract class AbstractSecurityEntity implements SecurityEntityInterface, Securi
 
     public function addRole(string $role): void
     {
-        $this->getSecurityManager()->entityRoles()->addRoleToEntity($role, $this);
+        $this->getSecurityManager()->roles()->addEntityToRole($this, $role);
     }
 
     public function removeRole(string $role): void
     {
-        $this->getSecurityManager()->entityRoles()->removeRoleFromEntity($role, $this);
+        $this->getSecurityManager()->roles()->removeEntityFromRole($this, $role);
     }
 
     public function inRole(string $role): bool
     {
-        return $this->getSecurityManager()->entityRoles()->isEntityInRole($this, $role);
+        return $this->getSecurityManager()->roles()->isEntityInRole($this, $role);
     }
 
     /**
@@ -47,7 +47,7 @@ abstract class AbstractSecurityEntity implements SecurityEntityInterface, Securi
     public function getRoles(): array
     {
         return $this->getSecurityManager()->roles()->getAll(
-            $this->getSecurityManager()->entityRoles()->getRolesForEntity($this)
+            $this->getSecurityManager()->roles()->getRolesForEntity($this)
         );
     }
 
