@@ -9,8 +9,8 @@ class SecurityManager
     private RoleProviderInterface       $roleProvider;
     private PermissionProviderInterface $permissionProvider;
     private RolePermissionProviderInterface $rolePermissionProvider;
-    private EntityServiceInterface      $entityService;
-    private EntityFactoryResolver       $entityFactoryNamespaceResolver;
+    private EntityServiceInterface $entityService;
+    private EntityFactoryResolver  $entityFactoryResolver;
 
     /**
      * @param RoleProviderInterface $roleProvider
@@ -26,7 +26,7 @@ class SecurityManager
     {
         $this->setRoleProvider($roleProvider);
         $this->setPermissionProvider($permissionProvider);
-        $this->entityFactoryNamespaceResolver = $entityResolver;
+        $this->entityFactoryResolver = $entityResolver;
     }
 
     private function setRoleProvider(RoleProviderInterface $roleProvider): void
@@ -66,10 +66,11 @@ class SecurityManager
     /**
      * @throws Exception
      */
-    public function entity($object): ?SecurityEntityInterface
+    public function entity($object=null): ?SecurityEntityInterface
     {
         if (is_string($object)) return $this->entityFromString($object);
         else if (is_object($object)) return $this->entityFromObject($object);
+        // ANONYMOUS SUPPORT: else if ($object === null) return $this->entityFactoryResolver->resolve('')->entity();
 
         throw new Exception(__METHOD__ . ' must be called with object or string');
     }
@@ -77,7 +78,7 @@ class SecurityManager
     private function entityFromString(string $entity_id): ?SecurityEntityInterface
     {
         $qid     = Qid::fromString($entity_id);
-        $factory = $this->entityFactoryNamespaceResolver->resolve($qid->getNamespace());
+        $factory = $this->entityFactoryResolver->resolve($qid->getNamespace());
 
         return $factory->get($this, $qid);
     }
@@ -87,7 +88,7 @@ class SecurityManager
      */
     private function entityFromObject($object): ?SecurityEntityInterface
     {
-        $factory = $this->entityFactoryNamespaceResolver->resolveFromObject($object);
+        $factory = $this->entityFactoryResolver->resolveFromObject($object);
 
         return $factory->entity($this, $object);
     }

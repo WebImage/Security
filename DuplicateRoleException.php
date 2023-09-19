@@ -2,4 +2,6 @@
 
 namespace WebImage\Security;
 
-class DuplicateRoleException extends \RuntimeException {}
+use RuntimeException;
+
+class DuplicateRoleException extends RuntimeException {}

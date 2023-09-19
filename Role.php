@@ -5,7 +5,7 @@ namespace WebImage\Security;
 class Role extends AbstractIdentifiable
 {
     /** @var string[] */
-    private array $permissions = [];
+    private array $permissions;
 
     /**
      * @param string $id

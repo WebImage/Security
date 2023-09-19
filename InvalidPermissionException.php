@@ -2,4 +2,6 @@
 
 namespace WebImage\Security;
 
-class InvalidPermissionException extends \RuntimeException {}
+use RuntimeException;
+
+class InvalidPermissionException extends RuntimeException {}

@@ -2,4 +2,6 @@
 
 namespace WebImage\Security;
 
-class InvalidRoleException extends \RuntimeException {}
+use RuntimeException;
+
+class InvalidRoleException extends RuntimeException {}

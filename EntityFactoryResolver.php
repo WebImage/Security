@@ -2,6 +2,7 @@
 
 namespace WebImage\Security;
 
+use Exception;
 use WebImage\Core\Dictionary;
 
 class EntityFactoryResolver
@@ -13,7 +14,7 @@ class EntityFactoryResolver
 
     public function __construct()
     {
-        $this->namespaces = new Dictionary();;
+        $this->namespaces = new Dictionary();
         $this->classNamespaceMap = new Dictionary();
     }
 
@@ -23,14 +24,14 @@ class EntityFactoryResolver
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function resolveFromObject($object): ?EntityFactoryInterface
     {
-        if (!is_object($object)) throw new \Exception(__METHOD__ . ' only supports object resolution');
+        if (!is_object($object)) throw new Exception(__METHOD__ . ' only supports object resolution');
         $className = get_class($object);
 
-        if (!$this->classNamespaceMap->has($className)) throw new \Exception($className . ' does not resolve to a namespace');
+        if (!$this->classNamespaceMap->has($className)) throw new Exception($className . ' does not resolve to a namespace');
 
         return $this->resolve($this->classNamespaceMap->get($className));
     }

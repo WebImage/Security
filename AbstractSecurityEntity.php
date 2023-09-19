@@ -46,9 +46,10 @@ abstract class AbstractSecurityEntity implements SecurityEntityInterface, Securi
      */
     public function getRoles(): array
     {
-        return $this->getSecurityManager()->roles()->getAll(
-            $this->getSecurityManager()->roles()->getRolesForEntity($this)
-        );
+        $roles = $this->securityManager->roles();
+        $role_ids = $roles->getRolesForEntity($this);
+
+        return $roles->getAll($role_ids);
     }
 
     public function canDo(string $permission): bool

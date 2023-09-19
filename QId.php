@@ -55,4 +55,9 @@ class QId
 
         return new QId($namespace, $id);
     }
+
+    public function __toString()
+    {
+        return $this->toString();
+    }
 }
