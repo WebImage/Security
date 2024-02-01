@@ -7,10 +7,10 @@ use WebImage\Core\Dictionary;
 interface RoleProviderInterface
 {
     /**
-     * @param string $role_id
+     * @param string $roleId
      * @return Role|null
      */
-    public function get(string $role_id): ?Role;
+    public function get(string $roleId): ?Role;
 
     /**
      * @param string $role_id
@@ -18,10 +18,16 @@ interface RoleProviderInterface
      */
     public function exists(string $role_id): bool;
     /**
-     * @param string[] $role_ids
+     * @param string[] $limitRoleIds
      * @return Role[]
      */
-    public function getAll(array $role_ids=null): array;
+    public function getAll(array $limitRoleIds=null): array;
+
+	/**
+	 * @param array $roleIds
+	 * @return Dictionary
+	 */
+	public function createRoleLookup(array $roleIds): Dictionary;
 
     /**
      * @param string $role_id
@@ -49,7 +55,7 @@ interface RoleProviderInterface
      * @return SecurityEntityInterface[]
      * @throws Exception
      */
-    public function getEntitiesInRole(string $role_id, int $offset = null, int $limit = null): array;
+    public function entitiesInRole(string $role_id, int $offset = null, int $limit = null): array;
 
     /**
      * @param SecurityEntityInterface $entity
@@ -76,12 +82,19 @@ interface RoleProviderInterface
      * @param SecurityEntityInterface $entity
      * @return string[]
      */
-    public function getRolesForEntity(SecurityEntityInterface $entity): array;
+    public function rolesForEntity(SecurityEntityInterface $entity): array;
+
+	/**
+	 * @param SecurityEntityInterface[] $entities
+	 * @return Dictionary|array A key => value where key = SecurityEntityInterface::qid = roles:string[]
+	 */
+    public function rolesForEntities(array $entities): Dictionary;
+
     /**
-     * @param string[] $role_ids
+     * @param string[] $roleIds
      * @return Dictionary
      */
-    public function permissionsForRoles(array $role_ids): Dictionary;
+    public function permissionsForRoles(array $roleIds): Dictionary;
 
     /**
      * @param string $role

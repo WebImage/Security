@@ -88,7 +88,7 @@ class SecurityManager
 		$type = $this->getAndAssertSingleType($objects);
 
 		if ($type == 'string') return $this->entitiesFromStrings($objects);
-		else if ($type == 'object') throw new \RuntimeException(__METHOD__ . ' does not yet support objects');// $this->entitiesFromObjects($objects);
+		else if ($type == 'object') return $this->entitiesFromObjects($objects);
 
 		throw new Exception(__METHOD__ . ' must be called with object or string');
 	}
@@ -152,4 +152,16 @@ class SecurityManager
 
         return $factory->entity($this, $object);
     }
+
+	/**
+	 * @param array $objects
+	 * @return SecurityEntityInterface[]
+	 * @throws Exception
+	 */
+	private function entitiesFromObjects(array $objects): array
+	{
+		return array_map(function($object) {
+			return $this->entityFactoryResolver->resolveFromObject($object)->entity($this, $object);
+		}, $objects);
+	}
 }
