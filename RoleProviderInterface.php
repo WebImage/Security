@@ -18,7 +18,7 @@ interface RoleProviderInterface
      */
     public function exists(string $role_id): bool;
     /**
-     * @param string[] $limitRoleIds
+     * @param string[]|null $limitRoleIds  If NULL return all, otherwise return only the roles specified in $limitRoleIds.  empty($limitRoleIds) MUST return empty array
      * @return Role[]
      */
     public function getAll(array $limitRoleIds=null): array;

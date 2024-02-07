@@ -36,6 +36,10 @@ class Role extends AbstractIdentifiable
 //
 //        return true;
 //    }
+	public function permissions(): array
+	{
+		return $this->permissions;
+	}
 
     public function canDo(string $permission): bool
     {
