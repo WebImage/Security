@@ -2,9 +2,6 @@
     "name": "webimage/security",
     "description": "Security Interface library",
     "type": "library",
-    "require": {
-        "webimage/core": "dev-master"
-    },
     "autoload": {
         "psr-4": {
             "Webimage\\Security\\": "src/"
@@ -15,5 +12,8 @@
             "name": "Robert Jones II",
             "email": "rjones@corporatewebimage.com"
         }
-    ]
+    ],
+    "require": {
+        "webimage/core": "dev-master"
+    }
 }

@@ -147,12 +147,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/WebImage/Core.git",
-                "reference": "c811c7b77bac1efbbf254324f75ef0065d218afe"
+                "reference": "d1a1fda6011a524cf0fb336505ad67697f7c21e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WebImage/Core/zipball/c811c7b77bac1efbbf254324f75ef0065d218afe",
-                "reference": "c811c7b77bac1efbbf254324f75ef0065d218afe",
+                "url": "https://api.github.com/repos/WebImage/Core/zipball/d1a1fda6011a524cf0fb336505ad67697f7c21e9",
+                "reference": "d1a1fda6011a524cf0fb336505ad67697f7c21e9",
                 "shasum": ""
             },
             "require": {
@@ -178,9 +178,9 @@
             "description": "Core framework library",
             "support": {
                 "issues": "https://github.com/WebImage/Core/issues",
-                "source": "https://github.com/WebImage/Core/tree/1.2.0"
+                "source": "https://github.com/WebImage/Core/tree/1.2.1"
             },
-            "time": "2024-01-16T00:46:13+00:00"
+            "time": "2024-02-07T22:09:59+00:00"
         }
     ],
     "packages-dev": [],
