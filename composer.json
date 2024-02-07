@@ -2,9 +2,10 @@
     "name": "webimage/security",
     "description": "Security Interface library",
     "type": "library",
+    "version": "1.0.0",
     "autoload": {
         "psr-4": {
-            "Webimage\\Security\\": "src/"
+            "WebImage\\Security\\": "src/"
         }
     },
     "authors": [
