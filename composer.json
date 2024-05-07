@@ -15,6 +15,6 @@
         }
     ],
     "require": {
-        "webimage/core": "dev-master"
+        "webimage/core": "dev-main"
     }
 }
