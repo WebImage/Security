@@ -14,6 +14,6 @@
         }
     ],
     "require": {
-        "webimage/core": "dev-main"
+        "webimage/core": "^1.3.1"
     }
 }
