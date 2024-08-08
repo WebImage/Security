@@ -9,7 +9,7 @@ class SecurityManager
 {
     private RoleProviderInterface       $roleProvider;
     private PermissionProviderInterface $permissionProvider;
-    private RolePermissionProviderInterface $rolePermissionProvider;
+//    private RolePermissionProviderInterface $rolePermissionProvider;
     private EntityServiceInterface $entityService;
     private EntityFactoryResolver  $entityFactoryResolver;
 
@@ -42,11 +42,11 @@ class SecurityManager
         if ($permissionProvider instanceof SecurityManagerAwareInterface) $permissionProvider->setSecurityManager($this);
     }
 
-    private function setRolePermissionProvider(RolePermissionProviderInterface $rolePermissionProvider): void
-    {
-        $this->rolePermissionProvider = $rolePermissionProvider;
-        if ($rolePermissionProvider instanceof SecurityManagerAwareInterface) $rolePermissionProvider->setSecurityManager($this);
-    }
+//    private function setRolePermissionProvider(RolePermissionProviderInterface $rolePermissionProvider): void
+//    {
+//        $this->rolePermissionProvider = $rolePermissionProvider;
+//        if ($rolePermissionProvider instanceof SecurityManagerAwareInterface) $rolePermissionProvider->setSecurityManager($this);
+//    }
 
     /**
      * @return RoleProviderInterface
@@ -65,6 +65,7 @@ class SecurityManager
     }
 
 	/**
+	 * @param string|object $object
 	 * @throws Exception
 	 */
 	public function entity($object=null): ?SecurityEntityInterface

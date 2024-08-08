@@ -4,7 +4,7 @@ namespace WebImage\Security;
 
 trait RoleProviderAwareTrait
 {
-    private $roleProvider;
+    private RoleProviderInterface $roleProvider;
 
     public function roles(): RoleProviderInterface
     {

@@ -2,7 +2,7 @@
 
 namespace WebImage\Security;
 
-abstract class AbstractIdentifiable
+abstract class AbstractIdentifiable implements NameableIdentityInterface
 {
     protected string $id;
     protected string $name;

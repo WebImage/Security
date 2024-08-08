@@ -2,6 +2,7 @@
 
 namespace WebImage\Security;
 
+use Exception;
 use WebImage\Core\Dictionary;
 
 interface RoleProviderInterface
@@ -52,7 +53,7 @@ interface RoleProviderInterface
      * @param string $role_id
      * @param int|null $offset
      * @param int|null $limit
-     * @return SecurityEntityInterface[]
+     * @return string[] Entity IDs that can be mapped to objects
      * @throws Exception
      */
     public function entitiesInRole(string $role_id, int $offset = null, int $limit = null): array;
