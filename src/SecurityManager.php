@@ -112,6 +112,9 @@ class SecurityManager
     {
         $qid     = Qid::fromString($entity_id);
         $factory = $this->entityFactoryResolver->resolve($qid->getNamespace());
+		if ($factory === null) {
+			throw new InvalidNamespaceException('Unknown security namespace: ' . $qid->getNamespace());
+		}
 
         return $factory->get($this, $qid);
     }
@@ -150,8 +153,9 @@ class SecurityManager
     private function entityFromObject($object): ?SecurityEntityInterface
     {
         $factory = $this->entityFactoryResolver->resolveFromObject($object);
+		$namespace = $this->entityFactoryResolver->namespaceForObject($object);
 
-        return $factory->entity($this, $object);
+        return $factory->entity($this, $object, $namespace);
     }
 
 	/**
